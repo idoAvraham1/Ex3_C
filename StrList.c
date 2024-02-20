@@ -7,10 +7,10 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
- struct _StrList{
+ typedef struct _StrList{
   Node* head;
   size_t size;
-};
+}StrList;
 
 
 //------------------------------------------------
@@ -126,10 +126,15 @@ char* StrList_firstData(const StrList* StrList){
 }
 
 void StrList_print(const StrList* StrList) {
-    Node* p= StrList->head;
-    while(p!=NULL){
-         printf("%s ",p->data);
-         p=p->next;
+    Node* p = StrList->head;
+    
+    while (p != NULL) {
+        printf("%s", p->data);
+        // Print space only if the current node is not the last node
+        if (p->next != NULL) {
+            printf(" ");
+        }
+        p = p->next;
     }
     printf("\n");
 }
@@ -261,12 +266,21 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2){
             return 1;
         }
 
-int StrList_isSorted(StrList* StrList){
-    struct StrList* check_sort= (struct StrList *) StrList_clone(StrList);
-    StrList_sort((struct _StrList *) check_sort);
-    int cmp= StrList_isEqual((const struct _StrList *) check_sort, StrList);
-    StrList_free((struct _StrList *) check_sort);
-    return cmp;
+int StrList_isSorted( StrList* list) {
+
+    if (StrList_size(list) <= 1) {
+        return 1; // An empty list or a single element list is considered sorted
+    }
+
+    Node *current = list->head;
+    while (current->next != NULL) {
+        if (strcmp(current->data, current->next->data) > 0) {
+            return 0; // List is not sorted
+        }
+        current = current->next;
+    }
+
+    return 1; // List is sorted
 }
 
 void StrList_reverse( StrList* StrList){

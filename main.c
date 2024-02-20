@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "StrList.h"
+#include <string.h>
+#include <ctype.h>
 
 char* scan_word() {
     char* word = NULL;
@@ -7,26 +9,24 @@ char* scan_word() {
     char ch;
 
     // Skip leading whitespace characters
-    while (scanf("%c", &ch) == 1 && (ch == ' ' || ch == '\n'));
-
+    while (scanf("%c", &ch) == 1 && isspace(ch)){
+    }
     // Read the word
-    do {
+     while(!isspace(ch)){
         word = realloc(word, (word_size + 1) * sizeof(char));
-        if (word == NULL) {
+        if(!word){
             free(word);
-            return NULL;
-        }
+            return NULL;}
         word[word_size++] = ch;
 
         // Read the next character
         if (scanf("%c", &ch) != 1) {
             break;  // Exit the loop if unable to read next character
         }
-    } while (ch != ' ' && ch != '\n');
-
+    } 
     // Null-terminate the word
     word = realloc(word, (word_size + 1) * sizeof(char));
-    if (word == NULL) {
+    if(!word) {
         free(word);
         return NULL;
     }
@@ -34,8 +34,7 @@ char* scan_word() {
 
     return word;
 }
-
-void init_list(StrList* list) {
+void init_list(StrList* list){
     int num_of_words;
     scanf(" %d", &num_of_words);
     getchar();
@@ -48,6 +47,8 @@ void init_list(StrList* list) {
         free(word);
     }
 }
+
+
 
 int main() {
 
@@ -62,10 +63,11 @@ int main() {
                 init_list(list);
         }
         else if(options==2){
-            int index=-1;
-            scanf(" %d",&index);
+            int index;
+            scanf("%d",&index);
             char* word=scan_word();
             StrList_insertAt(list,word,index);
+            free(word);
         }
         else if(options==3){
             StrList_print(list);
@@ -83,7 +85,9 @@ int main() {
         }
         else if(options==7){
             char* word=scan_word();
-            printf("%d\n",StrList_count(list,word));
+            int n=StrList_count(list,word);
+            printf("%d\n",n);
+            free(word);
         }
         else if(options==8){
             char* word=scan_word();
@@ -109,7 +113,10 @@ int main() {
             StrList_sort(list);
         }
         else if(options==13){
-            printf("%d\n",StrList_isSorted(list));
+            if(StrList_isSorted(list)){
+                printf("true\n");
+            }
+            else{ printf("false\n");}
         }
 
 
