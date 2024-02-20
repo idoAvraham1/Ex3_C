@@ -54,7 +54,6 @@ int main() {
 
     int options;
     StrList* list=StrList_alloc();
-    StrList* clone=StrList_alloc();
 
     do {
         scanf("%d", &options);
@@ -92,6 +91,7 @@ int main() {
         else if(options==8){
             char* word=scan_word();
             StrList_remove(list,word);
+            free(word);
         }
         else if(options==9){
             int index;
@@ -124,6 +124,6 @@ int main() {
         while(options !=0);
 
     StrList_free(list);
-    StrList_free(clone);
+
     return 0;
 }
