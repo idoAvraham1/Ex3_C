@@ -50,7 +50,7 @@ void init_list(StrList* list) {
 }
 
 int main() {
-    char enter_words;
+
     int options;
     StrList* list=StrList_alloc();
     StrList* clone=StrList_alloc();
@@ -59,10 +59,7 @@ int main() {
         scanf("%d", &options);
 
         if(options==1){
-            scanf(" %c", &enter_words);
-            if(enter_words=='A'){
                 init_list(list);
-            }
         }
         else if(options==2){
             int index=-1;
