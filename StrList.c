@@ -32,6 +32,7 @@ void Node_free(Node* node){
     if (node == NULL) {
         return;
     }
+    free(node->data);
     free(node);
 }
 //------------------------------------------------
