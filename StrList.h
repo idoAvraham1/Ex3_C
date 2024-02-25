@@ -40,13 +40,13 @@ size_t StrList_size(const StrList* StrList);
  * Inserts an element in the end of the StrList.
  */
 void StrList_insertLast(StrList* StrList,
-                        const char* data);
+					  const char* data);
 
 /*
 * Inserts an element at given index
 */
 void StrList_insertAt(StrList* StrList,
-                      const char* data,int index);
+	const char* data,int index);
 
 /*
  * Returns the StrList first data.
@@ -90,18 +90,18 @@ void StrList_removeAt(StrList* StrList, int index);
 int StrList_isEqual(const StrList* StrList1, const StrList* StrList2);
 
 /*
- * Clones the given StrList.
+ * Clones the given StrList. 
  * It's the user responsibility to free it with StrList_free.
  */
 StrList* StrList_clone(const StrList* StrList);
 
 /*
- * Reveres the given StrList.
+ * Reverces the given StrList. 
  */
 void StrList_reverse( StrList* StrList);
 
 /*
- * Sort the given list in lexicographical order
+ * Sort the given list in lexicographical order 
  */
 void StrList_sort( StrList* StrList);
 

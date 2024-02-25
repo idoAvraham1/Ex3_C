@@ -2,7 +2,12 @@
 #include "StrList.h"
 #include <string.h>
 #include <ctype.h>
-
+// Function to scan a word from the input stream
+// Parameters:
+//   - input: FILE pointer representing the input stream
+//   - size: Initial size for memory allocation
+// Returns:
+//   - A dynamically allocated string containing the scanned word
 char* scan_word(FILE* input, size_t size) {
     char* word = NULL;
     size_t word_size = 0;
@@ -16,8 +21,8 @@ char* scan_word(FILE* input, size_t size) {
     while (ch != EOF && !isspace(ch) && ch != '\n') {
         word = realloc(word, (word_size + 1) * sizeof(char));
         if (!word) {
-            free(word);
-            return NULL;
+            fprintf(stderr, "Error: Memory allocation failure\n");
+            exit(EXIT_FAILURE);
         }
         word[word_size++] = ch;
 
@@ -28,13 +33,18 @@ char* scan_word(FILE* input, size_t size) {
     // Null-terminate the word
     word = realloc(word, (word_size + 1) * sizeof(char));
     if (!word) {
-        free(word);
-        return NULL;
+        fprintf(stderr, "Error: Memory allocation failure\n");
+        exit(EXIT_FAILURE);
     }
     word[word_size] = '\0';
 
     return word;
 }
+// Function to initialize a StrList with words scanned from the input stream
+// Parameters:
+//   - list: Pointer to the StrList to be initialized
+// Returns:
+//   - None
 void init_list(StrList* list){
     int num_of_words;
     scanf(" %d", &num_of_words);
