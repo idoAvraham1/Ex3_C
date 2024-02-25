@@ -3,30 +3,31 @@
 #include <string.h>
 #include <ctype.h>
 
-char* scan_word() {
+char* scan_word(FILE* input, size_t size) {
     char* word = NULL;
-    int word_size = 0;
-    char ch;
+    size_t word_size = 0;
+    int ch;
 
     // Skip leading whitespace characters
-    while (scanf("%c", &ch) == 1 && isspace(ch)){
+    while ((ch = fgetc(input)) != EOF && isspace(ch)) {
     }
+
     // Read the word
-     while(!isspace(ch)){
+    while (ch != EOF && !isspace(ch) && ch != '\n') {
         word = realloc(word, (word_size + 1) * sizeof(char));
-        if(!word){
+        if (!word) {
             free(word);
-            return NULL;}
+            return NULL;
+        }
         word[word_size++] = ch;
 
         // Read the next character
-        if (scanf("%c", &ch) != 1) {
-            break;  // Exit the loop if unable to read next character
-        }
-    } 
+        ch = fgetc(input);
+    }
+
     // Null-terminate the word
     word = realloc(word, (word_size + 1) * sizeof(char));
-    if(!word) {
+    if (!word) {
         free(word);
         return NULL;
     }
@@ -37,9 +38,9 @@ char* scan_word() {
 void init_list(StrList* list){
     int num_of_words;
     scanf(" %d", &num_of_words);
-    getchar();
+     getchar();
     for (int i = 0; i < num_of_words; i++) {
-        char* word = scan_word();
+        char* word = scan_word(stdin,10);
         if (word == NULL) {
             return;
         }
@@ -64,7 +65,7 @@ int main() {
         else if(options==2){
             int index;
             scanf("%d",&index);
-            char* word=scan_word();
+            char* word=scan_word(stdin,10);
             StrList_insertAt(list,word,index);
             free(word);
         }
@@ -83,13 +84,13 @@ int main() {
             printf("%d\n",StrList_printLen(list));
         }
         else if(options==7){
-            char* word=scan_word();
+            char* word=scan_word(stdin,10);
             int n=StrList_count(list,word);
             printf("%d\n",n);
             free(word);
         }
         else if(options==8){
-            char* word=scan_word();
+            char* word=scan_word(stdin,10);
             StrList_remove(list,word);
             free(word);
         }
