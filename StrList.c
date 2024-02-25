@@ -128,9 +128,7 @@ char* StrList_firstData(const StrList* StrList){
 
 void StrList_print(const StrList* StrList) {
     Node* p = StrList->head;
-     if(StrList->size<1){
-        return;
-    }
+    
     while (p != NULL) {
         printf("%s", p->data);
         // Print space only if the current node is not the last node
