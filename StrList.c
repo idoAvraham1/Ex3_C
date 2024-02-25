@@ -17,11 +17,11 @@ typedef struct Node {
 // Node implementation
 //------------------------------------------------
 
-// allocate memory for a new node and returns it.
 Node* Node_alloc(char* data , Node* next){
+// Allocate memory for a new node and initialize its data and next pointer.
     Node* p= (Node*) malloc(sizeof(Node));
     if(p==NULL){
-        return NULL;
+        return NULL;// Memory allocation failure
     }
     p->data=data;
     p->next=next;
@@ -32,7 +32,7 @@ void Node_free(Node* node){
     if (node == NULL) {
         return;
     }
-    free(node->data);
+    free(node->data); // Free the data stored in the node
     free(node);
 }
 //------------------------------------------------
@@ -66,7 +66,7 @@ size_t StrList_size(const StrList* StrList){
     return StrList->size;
 }
 
-// return the node in the index
+// return the node in the given index
 Node* getNodeAt(int index, const StrList* StrList) {
     if (StrList == NULL || index < 0) {
         return NULL;
@@ -80,44 +80,66 @@ Node* getNodeAt(int index, const StrList* StrList) {
     return p;
 }
 
-void StrList_insertLast(StrList* StrList, const char* data){
+void StrList_insertLast(StrList* StrList, const char* data) {
+    if (data == NULL) {
+        return; // Don't insert NULL data
+    }
+    // Create a new node with duplicated data and insert it at the end of the list.
     Node* new_node = Node_alloc(strdup(data), NULL);
-    if(!new_node){ return;}
-    Node* last= getNodeAt((int)StrList->size-1,StrList);
+    if (!new_node) {
+        return; // Memory allocation failure
+    }
+    Node* last = getNodeAt((int)StrList->size - 1, StrList);
     if (last == NULL) {
         StrList->head = new_node;
-    }
-    else {
-       last->next=new_node;
+    } else {
+        last->next = new_node;
     }
     StrList->size++;
 }
 
-void StrList_insertAt(StrList* StrList,const char* data,int index){
-    char* new_data= strdup(data);
+void StrList_insertAt(StrList* StrList, const char* data, int index) {
+    if (data == NULL) {
+        return; // Don't insert NULL data
+    }
+    // Duplicate the data and insert it at the specified index.
+    char* new_data = strdup(data);
+    if (new_data == NULL) {
+        return; // Memory allocation failure
+    }
+
     if(index==0) {
-        Node* new_head= Node_alloc(new_data,StrList->head);
-        if(!new_head){return;}
-        Node* previous_head= StrList->head;
-        StrList->head=new_head;
-        StrList->head->next=previous_head;
+        // Insert at the beginning of the list by updating the head.
+        Node* new_head = Node_alloc(new_data, StrList->head);
+        if (!new_head) {
+            free(new_data);
+            return; // Memory allocation failure
+        }
+        Node* previous_head = StrList->head;
+        StrList->head = new_head;
+        StrList->head->next = previous_head;
     }
     else {
+        // Insert at the specified index by updating pointers.
         Node* current = getNodeAt(index, StrList);
-        Node* previous= getNodeAt(index-1,StrList);
+        Node* previous = getNodeAt(index-1,StrList);
         if (current == NULL) {
             free(new_data);  // Free the memory allocated for new_data
             return;
         } else {
             if(previous) {
                 Node *new_node = Node_alloc(new_data, current);
-                if(!new_node){return;}
+                if(!new_node){
+                    free(new_data);
+                    return; // Memory allocation failure
+                }
                 previous->next = new_node;
             }
         }
     }
     StrList->size++;
 }
+
 char* StrList_firstData(const StrList* StrList){
     Node* head= getNodeAt(0,StrList);
     if(head) {
